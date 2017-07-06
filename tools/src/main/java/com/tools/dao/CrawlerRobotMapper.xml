@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tools.dao.CrawlerRobotMapper">
+
+
+
+	<insert id="insertToolArticle">
+		INSERT INTO t_tools_article (
+		title,
+		type,
+		link,
+		source,
+		keywords,
+		content,
+		CREATON
+		)
+		VALUES
+		(
+		#{title},
+		#{type},
+		#{link},
+		#{source},		
+		#{keywords},
+		#{content},
+		NOW()
+		);
+	</insert>
+
+	<update id="updateToolArticle">
+		UPDATE t_tools_article set
+		title=#{title},
+		link=#{link},
+		image=#{image},
+		keywords=#{keywords},
+		content=#{content}
+		WHERE ID = #{id}
+	</update>
+
+</mapper>
