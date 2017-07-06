@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.im.dao.InfoLinkDao">
+
+	<sql id="infoLinkColumns">
+		a.id AS "id",
+		a.infoLink_CODE AS "infoLinkCode",
+		a.infoLink_NAME AS "infoLinkName",
+		a.LINK_TYPE AS "linkType",
+		a.LINK_VALUE AS "linkValue",
+		a.REMARKS AS "infoLinkRemarks",
+		a.DELETE_STATUS AS "deleteStatus",
+		a.MODIFIEDBY AS "modifiedby",
+		DATE_FORMAT(a.MODIFIEDON,'%Y-%m-%d %H:%i:%s') AS "modifiedon",
+		a.CREATEDBY AS "createdby",
+		DATE_FORMAT(a.CREATEDON,'%Y-%m-%d
+		%H:%i:%s') AS "createdon"
+	</sql>
+
+	<select id="findList" resultType="InfoLink">
+		SELECT
+		<include refid="infoLinkColumns" />
+		FROM t_niis_infolink a 
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.MODIFIEDON DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO t_niis_infolink (
+		infoLink_CODE,
+		infoLink_NAME,
+		LINK_TYPE,
+		LINK_VALUE,
+		DELETE_STATUS,
+		REMARKS,
+		MODIFIEDBY,
+		MODIFIEDON,
+		CREATEDBY,
+		CREATEDON
+		)
+		VALUES
+		(#{infoLinkCode},
+		#{infoLinkName},
+		#{linkType},
+		#{linkValue},
+		#{deleteStatus},
+		#{infoLinkRemarks},
+		#{modifiedby},
+		NOW(),
+		#{createdby},
+		NOW()
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE t_niis_infolink SET
+
+		infoLink_CODE=#{infoLinkCode},
+		infoLink_NAME=#{infoLinkName},
+		LINK_TYPE=#{linkType},
+		LINK_VALUE=#{linkValue}, 
+		DELETE_STATUS=#{deleteStatus},
+		REMARKS=#{infoLinkRemarks},
+		MODIFIEDBY=#{modifiedby},
+		MODIFIEDON=NOW()
+
+		WHERE ID = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE t_niis_infolink SET
+		DELETE_STATUS = #{deleteStatus},
+		MODIFIEDBY=#{modifiedby},
+		MODIFIEDON=NOW()
+		WHERE ID = #{id}
+	</update>
+ 
+
+	<select id="getInfoLinkById" resultType="InfoLink">
+		SELECT
+		<include refid="infoLinkColumns" />
+		FROM t_niis_infolink a
+		<where> 
+			and a.id=#{id}
+		</where>
+	</select>
+
+	<select id="getinfoLinkByCode" resultType="InfoLink">
+		SELECT
+		<include refid="infoLinkColumns" />
+		FROM t_niis_infolink a
+		WHERE
+		1=1
+		<if test="infoLinkCode !=null and infoLinkCode !=''">
+			and a.infoLink_CODE=#{infoLinkCode}
+		</if>
+		<if test="infoLinkName !=null and infoLinkName !=''">
+			and a.infoLink_NAME like '%${infoLinkName}%'
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.MODIFIEDON DESC
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="getByCode" resultType="InfoLink">
+		SELECT
+		<include refid="infoLinkColumns" />
+		FROM t_niis_infolink a
+		WHERE
+		1=1
+		<if test="code !=null and code !=''">
+			and a.infoLink_CODE=#{code}
+		</if>
+	</select>
+
+	<select id="getByName" resultType="InfoLink">
+		SELECT
+		<include refid="infoLinkColumns" />
+		FROM t_niis_infolink a
+		WHERE
+		1=1
+		<if test="name !=null and name !=''">
+			and a.infoLink_Name=#{name}
+		</if>
+	</select>
+	
+</mapper>

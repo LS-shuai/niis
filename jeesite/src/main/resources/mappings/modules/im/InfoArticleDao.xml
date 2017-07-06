@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.im.dao.InfoArticleDao"> 
+	<sql id="infoArticleColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.type AS "type",
+		a.link AS "link",
+		a.keywords AS "keywords",
+		a.content AS "content",
+		DATE_FORMAT(a.creaton,'%Y-%m-%d
+		%H:%i:%s') AS "createon" 
+	</sql>
+
+	<select id="findList" resultType="InfoArticle">
+		SELECT
+		<include refid="infoArticleColumns" />
+		FROM t_tools_article a
+		<where>
+			a.DELETE_STATUS = 0
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.creaton DESC
+			</otherwise>
+		</choose>
+	</select>
+ 
+	<update id="delete">
+		UPDATE t_tools_article SET
+		DELETE_STATUS = 1
+		WHERE ID =
+		#{id}
+	</update>
+
+	<delete id="deleteByIds">
+		DELETE FROM t_tools_article WHERE ID IN
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<insert id="pushTitle">
+		INSERT INTO cms_article (
+		id,
+		category_id,
+		title,
+		keywords,
+		create_by,
+		create_date,
+		update_date
+		)
+		VALUES
+		(#{id},
+		#{type},
+		#{title},
+		#{keywords}, 
+		"1",
+		NOW(),
+		NOW()
+		)
+	</insert>
+
+
+	<insert id="pushContent">
+		INSERT INTO cms_article_data (
+		id, 
+		content,
+		copyfrom 
+		)
+		VALUES
+		(#{id},
+		#{content},
+		#{link}
+		)
+	</insert>
+
+
+
+	<select id="getInfoArticleById" resultType="InfoArticle">
+		SELECT
+		<include refid="infoArticleColumns" />
+		FROM t_tools_article a
+		<where>
+			a.DELETE_STATUS = 0
+			and a.id=#{id}
+		</where>
+	</select>
+</mapper>
