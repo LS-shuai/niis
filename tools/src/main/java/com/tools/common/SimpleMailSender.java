@@ -54,7 +54,7 @@ public class SimpleMailSender {
     public SimpleMailSender(final String username, final String password) {
     //通过邮箱地址解析出smtp服务器，对大多数邮箱都管用
     String smtpHostName = "smtp.exmail." + username.split("@")[1];
-    if(username.split("@")[1].equals("9fbank.com")){
+    if(username.split("@")[1].equals("*****")){
     	smtpHostName = "smtp.exmail.qq.com";	
     }
     init(username, password, smtpHostName);
@@ -187,9 +187,9 @@ public class SimpleMailSender {
     }
     public static void main(String[] args) {
     	Properties props = PropertiesUtil.getProperties("config.properties");
-    	String username = props.getProperty("smtp.zhaipi.username");
-    	String pwd = props.getProperty("smtp.zhaipi.password");   	
-    	String receiveName = "zhaipi@9fbank.com";//props.getProperty("smtp.licai.username");
+    	String username = props.getProperty("*********");
+    	String pwd = props.getProperty("*******");   	
+    	String receiveName = "******";//props.getProperty("smtp.licai.username");
     	List<String> receiveNames =Arrays.asList(receiveName.split(","));
 		SimpleMailSender sender = new SimpleMailSender(username, pwd);
 		try {
